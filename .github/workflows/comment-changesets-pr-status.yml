@@ -1,24 +1,13 @@
 name: Comment changesets PR status
 on:
   pull_request_target:
-    types: [opened, synchronize, reopened, labeled, unlabeled]
+    types: [opened, synchronize, reopened]
 
 permissions:
   contents: read
 
 jobs:
-  pr-status:
-    runs-on: ubuntu-latest
-    outputs:
-      comment-body: ${{ steps.pr-status.outputs.comment-body }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Generate PR status
-        id: pr-status
-        uses: changesets/action/pr-status@v2
-
   pr-comment:
-    needs: pr-status
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -26,4 +15,7 @@ jobs:
       - name: Comment on PR
         uses: changesets/action/pr-comment@v2
         with:
-          body: ${{ needs.pr-status.outputs.comment-body }}
+          body: |
+            ### Status comment (fixed body)
+
+            This is the status comment body produced by the workflow.
